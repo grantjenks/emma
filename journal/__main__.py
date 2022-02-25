@@ -7,6 +7,7 @@ import traceback
 import webbrowser
 
 from django.core.servers import basehttp
+from django.contrib.staticfiles.handlers import StaticFilesHandler
 
 url = None
 
@@ -28,8 +29,7 @@ if __name__ == '__main__':
     address = ('127.0.0.1', 0)
     app = basehttp.get_internal_wsgi_application()
     httpd = WSGIServer(address, basehttp.WSGIRequestHandler)
-    httpd.set_app(app)
-    # httpd.daemon_threads = True
+    httpd.set_app(StaticFilesHandler(app))
     thread = threading.Thread(target=httpd.serve_forever)
     thread.start()
 
