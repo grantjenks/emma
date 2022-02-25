@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"> 
+<plist version="1.0">
+  <!--
+      Service for Journal
+      Symlinks:
+      $HOME/Library/LaunchAgents/journal.daemon.plist
+      $ launchctl load $HOME/Library/LaunchAgents/journal.daemon.plist
+      $ launchctl unload $HOME/Library/LaunchAgents/journal.daemon.plist
+  -->
+  <dict> 
+    <key>Label</key>
+    <string>journal.daemon</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/grantjenks/repos/journal/env39/bin/python</string>
+      <string>-m</string>
+      <string>journal</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ServiceDescription</key>
+    <string>Journal</string>
+    <key>UserName</key>
+    <string>grantjenks</string>
+  </dict>
+</plist>
