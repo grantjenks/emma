@@ -1,15 +1,15 @@
 import re
 import setuptools
 
-with open('journal/__init__.py') as init:
+with open('emma/__init__.py') as init:
     text = init.read()
     match = re.search(r"__version__ = '(.+)'", text)
     version = match.group(1)
 
 setuptools.setup(
-    name='journal',
+    name='emma',
     version=version,
-    packages=['journal'],
+    packages=['emma'],
     install_requires=[
         'appdirs',
         'django==3.2.*',

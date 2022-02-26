@@ -13,8 +13,8 @@ url = None
 
 
 class App(rumps.App):
-    @rumps.clicked('Journal')
-    def journal(self, _):
+    @rumps.clicked('Emma')
+    def emma(self, _):
         webbrowser.open(url)
 
 
@@ -23,7 +23,7 @@ class WSGIServer(socketserver.ThreadingMixIn, basehttp.WSGIServer):
 
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'journal.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emma.settings')
     django.setup()
 
     address = ('127.0.0.1', 0)
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     host, port = httpd.socket.getsockname()
     url = f'http://{host}:{port}/'
 
-    app = App('J')
+    app = App('E')
     try:
         app.run()
     except BaseException as exc:

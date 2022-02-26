@@ -1,4 +1,4 @@
-"""journal URL Configuration
+"""emma URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -18,6 +18,6 @@ from django.shortcuts import redirect
 from django.urls import path
 
 urlpatterns = [
-    path('', lambda request: redirect('/journal/')),
-    path('journal/', admin.site.urls),
+    path('', lambda request: redirect('/emma/')),
+    path('emma/', admin.site.urls),
 ]
