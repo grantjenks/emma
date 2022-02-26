@@ -1,7 +1,9 @@
+import argparse
 import django
 import os
 import rumps
 import socketserver
+import subprocess
 import threading
 import traceback
 import webbrowser
@@ -22,7 +24,8 @@ class WSGIServer(socketserver.ThreadingMixIn, basehttp.WSGIServer):
     pass
 
 
-if __name__ == '__main__':
+def main():
+    global url
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emma.settings')
     django.setup()
 
@@ -43,3 +46,29 @@ if __name__ == '__main__':
         traceback.print_exc()
     httpd.shutdown()
     thread.join()
+
+
+def load():
+    subprocess.run('ln -s /Users/grantjenks/repos/emma/emma.daemon.plist ~/Library/LaunchAgents/', shell=True)
+    subprocess.run('launchctl load ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
+
+
+def unload():
+    subprocess.run('launchctl unload ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
+    subprocess.run('rm ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('command', nargs='?', choices=['', 'load', 'unload', 'reload'])
+    args = parser.parse_args()
+
+    if args.command is None:
+        main()
+    elif args.command == 'load':
+        load()
+    elif args.command == 'unload':
+        unload()
+    elif args.command == 'reload':
+        unload()
+        load()
