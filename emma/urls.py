@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path
 
+admin.site.index_title = 'Emma'
+admin.site.site_header = 'Emma'
+admin.site.site_title = 'Emma'
+
 urlpatterns = [
     path('', lambda request: redirect('/emma/')),
     path('emma/', admin.site.urls),
