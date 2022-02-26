@@ -84,6 +84,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': DATA_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'isolation_level': None,
+            'timeout': 10,
+        },
     }
 }
 
