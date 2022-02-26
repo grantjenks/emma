@@ -1,3 +1,3 @@
 *.pyc
-env39/
+env*/
 emma.egg-info/
