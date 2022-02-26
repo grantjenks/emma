@@ -52,7 +52,7 @@ def run_recorder():
     recorder_thread.join()
 
 
-def main():
+def run():
     with run_server(), run_recorder():
         app = App('E')
         try:
@@ -71,7 +71,7 @@ def unload():
     subprocess.run('rm ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'command',
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     django.setup()
 
     if args.command is None:
-        main()
+        run()
     elif args.command == 'load':
         load()
     elif args.command == 'unload':
@@ -92,3 +92,7 @@ if __name__ == '__main__':
     elif args.command == 'reload':
         unload()
         load()
+
+
+if __name__ == '__main__':
+    main()
