@@ -1,4 +1,5 @@
 import argparse
+import contextlib
 import django
 import os
 import rumps
@@ -10,6 +11,7 @@ import webbrowser
 
 from django.core.servers import basehttp
 from django.contrib.staticfiles.handlers import StaticFilesHandler
+from django.core.management import call_command
 
 url = None
 
@@ -24,28 +26,39 @@ class WSGIServer(socketserver.ThreadingMixIn, basehttp.WSGIServer):
     pass
 
 
-def main():
+@contextlib.contextmanager
+def run_server():
     global url
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emma.settings')
-    django.setup()
-
     address = ('127.0.0.1', 0)
     app = basehttp.get_internal_wsgi_application()
     httpd = WSGIServer(address, basehttp.WSGIRequestHandler)
     httpd.set_app(StaticFilesHandler(app))
-    thread = threading.Thread(target=httpd.serve_forever)
-    thread.start()
-
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.start()
     host, port = httpd.socket.getsockname()
     url = f'http://{host}:{port}/'
-
-    app = App('E')
-    try:
-        app.run()
-    except BaseException as exc:
-        traceback.print_exc()
+    yield
     httpd.shutdown()
-    thread.join()
+    server_thread.join()
+
+
+@contextlib.contextmanager
+def run_recorder():
+    from emma.management.commands import record
+    recorder_thread = threading.Thread(target=call_command, args=('record',))
+    recorder_thread.start()
+    yield
+    record.RUNNING = False
+    recorder_thread.join()
+
+
+def main():
+    with run_server(), run_recorder():
+        app = App('E')
+        try:
+            app.run()
+        except BaseException:
+            traceback.print_exc()
 
 
 def load():
@@ -60,8 +73,15 @@ def unload():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', nargs='?', choices=['', 'load', 'unload', 'reload'])
+    parser.add_argument(
+        'command',
+        nargs='?',
+        choices=['', 'load', 'unload', 'reload'],
+    )
     args = parser.parse_args()
+
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emma.settings')
+    django.setup()
 
     if args.command is None:
         main()
