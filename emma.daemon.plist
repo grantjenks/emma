@@ -13,7 +13,7 @@
     <string>emma.daemon</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/Users/grantjenks/repos/emma/env39/bin/python</string>
+      <string>/Users/grantjenks/repos/emma/env/bin/python</string>
       <string>-m</string>
       <string>emma</string>
     </array>
