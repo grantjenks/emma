@@ -18,6 +18,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = Path(appdirs.user_data_dir('Emma', 'Grant Jenks', 'v1'))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -77,8 +78,6 @@ WSGI_APPLICATION = 'emma.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DATABASES = {
     'default': {
