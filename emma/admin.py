@@ -8,9 +8,9 @@ admin.site.unregister(User)
 
 
 class ScreenshotAdmin(admin.ModelAdmin):
-    list_display = ['time', 'num', 'image']
+    list_display = ['time', 'display', 'image']
     ordering = ['-time']
-    readonly_fields = ['time', 'num', 'image']
+    readonly_fields = ['time', 'display', 'image']
 
 
 admin.site.register(Screenshot, ScreenshotAdmin)

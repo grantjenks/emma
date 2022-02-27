@@ -29,12 +29,12 @@ class Command(BaseCommand):
                         proc = subprocess.run(['screencapture', '-x', *screens])
                         image_paths = pathlib.Path(tempdir).glob('*.png')
                         for image_path in image_paths:
-                            num = int(str(image_path)[-5:-4])
+                            display = int(str(image_path)[-5:-4])
                             with image_path.open('rb') as image:
-                                name = f'{when.isoformat()}-{num}.png'
+                                name = f'{when.isoformat()}-{display}.png'
                                 image_file = File(image, name=name)
                                 screenshot = Screenshot(
-                                    num=num,
+                                    display=display,
                                     time=when,
                                     image=image_file,
                                 )
