@@ -24,4 +24,7 @@ Setup
 Ideas
 =====
 
-- Save disk space by only storing images if the current differs from previous
+- Use pynput for keyboard and mouse events
+- Add command to gc contents dir based on symlinks
+- Make ContentAddressableStorage._save robust to multiple threads/processes
+- Move recorder to separate process in status bar to avoid skew
