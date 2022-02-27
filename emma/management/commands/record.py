@@ -26,7 +26,8 @@ class Command(BaseCommand):
                     with tempfile.TemporaryDirectory() as tempdir:
                         screens = [f'{tempdir}/{num}.png' for num in range(10)]
                         when = timezone.now()
-                        proc = subprocess.run(['screencapture', '-x', *screens])
+                        args = ['screencapture', '-Cx', *screens]
+                        proc = subprocess.run(args)
                         image_paths = pathlib.Path(tempdir).glob('*.png')
                         for image_path in image_paths:
                             display = int(str(image_path)[-5:-4])
