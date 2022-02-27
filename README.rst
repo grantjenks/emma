@@ -19,3 +19,9 @@ Setup
 7. System Preferences > Security & Privacy > Screen Recording and allow "python"
 8. System Preferences > Security & Privacy > Full Disk Access and allow "python"
 9. $ emma reload
+
+
+Ideas
+=====
+
+- Save disk space by only storing images if the current differs from previous
