@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Browse | Emma</title>
+    <script src="https://unpkg.com/htmx.org@1.7.0"></script>
+  </head>
+  <body>
+    <h1>Browse</h1>
+    <div id="screenshot">
+      <div hx-trigger="keyup[key=='ArrowRight'] from:body"
+           hx-get="next/"
+           hx-select="#screenshot"
+           hx-target="#screenshot"
+           hx-swap="outerHTML"
+           hx-push-url="true"
+      ></div>
+      <div hx-trigger="keyup[key=='ArrowLeft'] from:body"
+           hx-get="prev/"
+           hx-select="#screenshot"
+           hx-target="#screenshot"
+           hx-swap="outerHTML"
+           hx-push-url="true"
+      ></div>
+      <p>Display: {{ screenshot.display }} / Time: {{ screenshot.time }}</p>
+      <img alt="Screenshot on display {{ screenshot.display }} at {{ screenshot.time }}"
+           src="{{ screenshot.image.url }}"
+           width="1024"
+      >
+    </div>
+  </body>
+</html>

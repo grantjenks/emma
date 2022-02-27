@@ -19,12 +19,17 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path
 
+from . import views
+
 admin.site.index_title = 'Emma'
 admin.site.site_header = 'Emma'
 admin.site.site_title = 'Emma'
 
 urlpatterns = [
-    path('', lambda request: redirect('/emma/')),
-    path('emma/', admin.site.urls),
-    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+    path('emma/browse/', views.browse),
+    path('emma/browse/<time>/', views.browse, name='browse'),
+    path('emma/browse/<time>/next/', views.browse_next),
+    path('emma/browse/<time>/prev/', views.browse_prev),
+    path('', admin.site.urls),
 ]
