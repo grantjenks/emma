@@ -1,7 +1,9 @@
 import argparse
 import contextlib
 import django
+import getpass
 import os
+import pathlib
 import rumps
 import socketserver
 import subprocess
@@ -62,13 +64,22 @@ def run():
 
 
 def load():
-    subprocess.run('ln -s /Users/grantjenks/repos/emma/emma.daemon.plist ~/Library/LaunchAgents/', shell=True)
-    subprocess.run('launchctl load ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
+    plist_path = pathlib.Path(__file__).parent / 'emma.daemon.plist'
+    with plist_path.open() as reader:
+        template = reader.read()
+    launch_path = pathlib.Path('~/Library/LaunchAgents/emma.daemon.plist')
+    launch_path = launch_path.expanduser()
+    with launch_path.open('w') as writer:
+        text = template.format(user=getpass.getuser())
+        writer.write(text)
+    subprocess.run(['launchctl', 'load', str(launch_path)])
 
 
 def unload():
-    subprocess.run('launchctl unload ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
-    subprocess.run('rm ~/Library/LaunchAgents/emma.daemon.plist', shell=True)
+    launch_path = pathlib.Path('~/Library/LaunchAgents/emma.daemon.plist')
+    launch_path = launch_path.expanduser()
+    subprocess.run(['launchctl', 'unload', str(launch_path)])
+    launch_path.unlink()
 
 
 def main():

@@ -13,7 +13,7 @@
     <string>emma.daemon</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/Users/grantjenks/repos/emma/env/bin/python</string>
+      <string>/Users/{user}/repos/emma/env/bin/python</string>
       <string>-m</string>
       <string>emma</string>
     </array>
@@ -22,6 +22,6 @@
     <key>ServiceDescription</key>
     <string>Emma</string>
     <key>UserName</key>
-    <string>grantjenks</string>
+    <string>{user}</string>
   </dict>
 </plist>
