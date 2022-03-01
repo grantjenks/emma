@@ -15,9 +15,9 @@ Setup
 3. $ python3 -m venv --copies env
 4. $ source env/bin/activate
 5. $ pip install -e .
-6. $ emma load
-7. System Preferences > Security & Privacy > Screen Recording and allow "python"
-8. $ emma reload
+6. System Preferences > Security & Privacy > Screen Recording
+   Allow "python" in the virtual env.
+7. $ emma load
 
 
 Ideas
@@ -26,4 +26,9 @@ Ideas
 - Use pynput for keyboard and mouse events
 - Add command to gc contents dir based on symlinks
 - Make ContentAddressableStorage._save robust to multiple threads/processes
-- Move recorder to separate process in status bar to avoid skew
+- Use multiple processes for Emma:
+  1. Status bar process
+  2. Recorder process
+  3. Server process
+  The "Emma" process joins the "Status bar" process, then terminates the
+  Recorder and Server process when it exits.
