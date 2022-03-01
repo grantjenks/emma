@@ -32,3 +32,17 @@ Ideas
   3. Server process
   The "Emma" process joins the "Status bar" process, then terminates the
   Recorder and Server process when it exits.
+
+
+Reset
+=====
+
+.. code::
+
+   from emma.models import Screenshot
+   Screenshot.objects.all().delete()
+
+   import shutil
+   from django.conf import settings
+   shutil.rmtree(settings.MEDIA_ROOT / 'screenshots')
+   shutil.rmtree(settings.MEDIA_ROOT / 'contents')
