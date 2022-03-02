@@ -30,7 +30,7 @@ setuptools.setup(
     ],
     entry_points = {
         'console_scripts': ['emma=emma.__main__:main'],
-    }
+    },
     classifiers=(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
