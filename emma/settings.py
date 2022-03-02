@@ -14,10 +14,14 @@ import appdirs
 
 from pathlib import Path
 
+from . import __version__
+
+MAJOR_VERSION = f'v{__version__.split(".")[0]}'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = Path(appdirs.user_data_dir('Emma', 'Grant Jenks', 'v1'))
+DATA_DIR = Path(appdirs.user_data_dir('Emma', 'Grant Jenks', MAJOR_VERSION))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
