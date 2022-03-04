@@ -79,7 +79,8 @@ def unload():
     launch_path = pathlib.Path('~/Library/LaunchAgents/emma.daemon.plist')
     launch_path = launch_path.expanduser()
     subprocess.run(['launchctl', 'unload', str(launch_path)])
-    launch_path.unlink()
+    with contextlib.suppress(FileNotFoundError):
+        launch_path.unlink()
 
 
 def main():
