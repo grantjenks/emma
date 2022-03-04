@@ -95,6 +95,8 @@ def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'emma.settings')
     django.setup()
 
+    call_command('migrate', '--verbosity', '0')
+
     if args.command is None:
         run()
     elif args.command == 'load':
