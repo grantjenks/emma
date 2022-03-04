@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'emma.middleware.login_user',
+    'emma.middleware.activate_timezone',
 ]
 
 ROOT_URLCONF = 'emma.urls'
