@@ -23,7 +23,11 @@
   </div>
   <script type="text/hyperscript">
    on htmx:afterSwap from #content
-   set actionEls to <tr input.action-select/>
-   if actionEls.length > 0 call Actions(actionsEls)
+   js
+     const actionsEls = document.querySelectorAll('tr input.action-select');
+     if (actionsEls.length > 0) {
+         Actions(actionsEls);
+     }
+   end
   </script>
 {% endblock %}
