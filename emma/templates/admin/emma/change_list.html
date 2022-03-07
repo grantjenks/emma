@@ -22,6 +22,11 @@
     {{ block.super }}
   </div>
   <script type="text/hyperscript">
+   on htmx:beforeSwap from #content
+   call anyChecked()
+   if result set event.detail.shouldSwap to false
+  </script>
+  <script type="text/hyperscript">
    on htmx:afterSwap from #content
    js
      const actionsEls = document.querySelectorAll('tr input.action-select');
