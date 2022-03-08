@@ -1,9 +1,5 @@
 """Make a video from screenshots
 
-Convert mkv video to mp4 for Mac:
-
-$ ffmpeg -i input.mkv -vcodec libx264 -pix_fmt yuv420p output.mp4
-
 Slow down mkv video so that it plays more slowly:
 
 $ ffmpeg -i input.mkv -filter:v "setpts=2.0*PTS" output.mkv
@@ -57,7 +53,20 @@ class Command(BaseCommand):
             stop = pacific.localize(stop)
             screenshots = screenshots.filter(time__lte=stop)
         screenshots = list(screenshots)
-        args = ['ffmpeg', '-loglevel', 'warning', '-f', 'image2pipe', '-i', '-', output]
+        args = [
+            'ffmpeg',
+            '-loglevel',
+            'warning',
+            '-f',
+            'image2pipe',
+            '-i',
+            '-',
+            '-vcodec',
+            'libx264',
+            '-pix_fmt',
+            'yuv420p',
+            output,
+        ]
         proc = subprocess.Popen(args, stdin=subprocess.PIPE)
         last = None
         for screenshot in tqdm.tqdm(screenshots):
