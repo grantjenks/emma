@@ -1,0 +1,6 @@
+{% extends 'admin/app_index.html' %}
+
+{% block content %}
+  <p><a href="{% url 'browse' %}">Browse</a></p>
+  {{ block.super }}
+{% endblock %}

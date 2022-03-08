@@ -27,9 +27,9 @@ admin.site.site_title = 'Emma'
 
 urlpatterns = [
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-    path('emma/browse/', views.browse),
-    path('emma/browse/<time>/', views.browse, name='browse'),
-    path('emma/browse/<time>/next/', views.browse_next),
-    path('emma/browse/<time>/prev/', views.browse_prev),
+    path('emma/browse/', views.browse, name='browse'),
+    path('emma/browse/<time>/', views.browse, name='browse-time'),
+    path('emma/browse/<time>/next/', views.browse_next, name='browse-next'),
+    path('emma/browse/<time>/prev/', views.browse_prev, name='browse-prev'),
     path('', admin.site.urls),
 ]
