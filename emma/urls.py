@@ -31,5 +31,6 @@ urlpatterns = [
     path('emma/browse/<time>/', views.browse, name='browse-time'),
     path('emma/browse/<time>/next/', views.browse_next, name='browse-next'),
     path('emma/browse/<time>/prev/', views.browse_prev, name='browse-prev'),
+    path('emma/histogram/', views.histogram, name='histogram'),
     path('', admin.site.urls),
 ]
