@@ -29,9 +29,7 @@
     {{ block.super }}
     <script type="text/hyperscript">
      on click from <#result_list tbody tr td:not(.action-checkbox), #result_list tbody tr th/>
-     js
-       event.target.parentElement.querySelector('input').click()
-     end
+     call event.target.parentElement.querySelector('input').click()
     </script>
   </div>
   <script type="text/hyperscript">
@@ -41,11 +39,8 @@
   </script>
   <script type="text/hyperscript">
    on htmx:afterSwap from #content
-   js
-     const actionsEls = document.querySelectorAll('tr input.action-select');
-     if (actionsEls.length > 0) {
-         Actions(actionsEls);
-     }
-   end
+   call document.querySelectorAll('tr input.action-select')
+   set actionEls to result
+   if actionEls.length > 0 call Actions(actionEls)
   </script>
 {% endblock %}
