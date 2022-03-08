@@ -31,6 +31,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--start')
         parser.add_argument('--stop')
+        parser.add_argument('--date')
         parser.add_argument('--display', type=int)
         parser.add_argument('output', type=pathlib.Path)
 
@@ -42,6 +43,11 @@ class Command(BaseCommand):
         screenshots = Screenshot.objects.order_by('time')
         screenshots = screenshots.filter(display=display)
         pacific = pytz.timezone('US/Pacific')
+        if options['date'] is not None:
+            date = options['date']
+            assert options['start'] is None and options['stop'] is None
+            options['start'] = f'{date}T00:00:00'
+            options['stop'] = f'{date}T23:59:59'
         if options['start'] is not None:
             start = dt.datetime.strptime(options['start'], '%Y-%m-%dT%H:%M:%S')
             start = pacific.localize(start)
