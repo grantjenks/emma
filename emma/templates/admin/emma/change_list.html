@@ -9,13 +9,20 @@
 
 {% block content %}
   <script>
-   function anyChecked() {
-       return django.jQuery(".action-select:checkbox:checked").length > 0;
+   function hasInteraction() {
+       var interactions = (
+           django.jQuery(".action-select:checkbox:checked").length
+           + django.jQuery('.content a:hover').length
+           + django.jQuery('.content button:hover').length
+           + django.jQuery('.content input:hover').length
+           + django.jQuery('.content select:hover').length
+       );
+       return interactions > 0;
    }
   </script>
   <div id="content-main-wrapper"
        hx-get=""
-       hx-trigger="every 1s [!anyChecked()]"
+       hx-trigger="every 1s [!hasInteraction()]"
        hx-swap="outerHTML"
        hx-select="#content-main-wrapper"
   >
@@ -23,7 +30,7 @@
   </div>
   <script type="text/hyperscript">
    on htmx:beforeSwap from #content
-   call anyChecked()
+   call hasInteraction()
    if result set event.detail.shouldSwap to false
   </script>
   <script type="text/hyperscript">
