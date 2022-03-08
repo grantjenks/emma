@@ -17,7 +17,11 @@ def browse(request, time=None):
     if screenshot.time != time:
         time = screenshot.time.isoformat()
         return redirect('browse-time', time=time)
-    return render(request, 'emma/browse.html', {'screenshot': screenshot})
+    context = {
+        'screenshot': screenshot,
+        **admin.site.each_context(request),
+    }
+    return render(request, 'emma/browse.html', context)
 
 
 def browse_next(request, time):
