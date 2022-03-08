@@ -2,65 +2,41 @@ import argparse
 import contextlib
 import django
 import getpass
+import multiprocessing as mp
 import os
 import pathlib
 import rumps
-import socketserver
+import signal
 import subprocess
-import threading
-import traceback
 import webbrowser
 
-from django.core.servers import basehttp
-from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.core.management import call_command
 
-url = None
+PROCESS_IDS = []
 
 
 class App(rumps.App):
     @rumps.clicked('Emma')
     def emma(self, _):
-        webbrowser.open(url)
+        webbrowser.open('http://127.0.0.1:15050')
 
-
-class WSGIServer(socketserver.ThreadingMixIn, basehttp.WSGIServer):
-    pass
-
-
-@contextlib.contextmanager
-def run_server():
-    global url
-    address = ('127.0.0.1', 0)
-    app = basehttp.get_internal_wsgi_application()
-    httpd = WSGIServer(address, basehttp.WSGIRequestHandler)
-    httpd.set_app(StaticFilesHandler(app))
-    server_thread = threading.Thread(target=httpd.serve_forever)
-    server_thread.start()
-    host, port = httpd.socket.getsockname()
-    url = f'http://{host}:{port}/'
-    yield
-    httpd.shutdown()
-    server_thread.join()
-
-
-@contextlib.contextmanager
-def run_recorder():
-    from emma.management.commands import record
-    recorder_thread = threading.Thread(target=call_command, args=('record',))
-    recorder_thread.start()
-    yield
-    record.RUNNING = False
-    recorder_thread.join()
+    @rumps.clicked('Quit')
+    def quit(self, _):
+        for pid in PROCESS_IDS:
+            os.kill(pid, signal.SIGTERM)
+        rumps.quit_application()
 
 
 def run():
-    with run_server(), run_recorder():
-        app = App('E')
-        try:
-            app.run()
-        except BaseException:
-            traceback.print_exc()
+    record_proc = mp.Process(target=call_command, args=['record'])
+    record_proc.start()
+    PROCESS_IDS.append(record_proc.pid)
+    runserver_args = ['runserver', '--noreload', '15050']
+    runserver_proc = mp.Process(target=call_command, args=runserver_args)
+    runserver_proc.start()
+    PROCESS_IDS.append(runserver_proc.pid)
+    app = App('E', quit_button=None)
+    app.run()
 
 
 def load():
