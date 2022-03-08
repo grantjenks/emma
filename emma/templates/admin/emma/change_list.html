@@ -27,6 +27,12 @@
        hx-select="#content-main-wrapper"
   >
     {{ block.super }}
+    <script type="text/hyperscript">
+     on click from <#result_list tbody tr td:not(.action-checkbox), #result_list tbody tr th/>
+     js
+       event.target.parentElement.querySelector('input').click()
+     end
+    </script>
   </div>
   <script type="text/hyperscript">
    on htmx:beforeSwap from #content
