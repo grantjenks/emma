@@ -24,25 +24,5 @@ Ideas
 =====
 
 - Use pynput for keyboard and mouse events
-- Add command to gc contents dir based on symlinks
 - Make ContentAddressableStorage._save robust to multiple threads/processes
-- Use multiple processes for Emma:
-  1. Status bar process
-  2. Recorder process
-  3. Server process
-  The "Emma" process joins the "Status bar" process, then terminates the
-  Recorder and Server process when it exits.
-
-
-Reset
-=====
-
-.. code::
-
-   from emma.models import Screenshot
-   Screenshot.objects.all().delete()
-
-   import shutil
-   from django.conf import settings
-   shutil.rmtree(settings.MEDIA_ROOT / 'screenshots')
-   shutil.rmtree(settings.MEDIA_ROOT / 'contents')
+- Stop admin auto-reload when hovering on anchor link
