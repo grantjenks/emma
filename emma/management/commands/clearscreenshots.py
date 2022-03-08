@@ -5,6 +5,7 @@
 import datetime as dt
 import pytz
 
+from contextlib import suppress
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from tqdm import tqdm
@@ -15,20 +16,34 @@ from ...models import Screenshot
 class Command(BaseCommand):
     help = 'Clear screenshots'
 
+    def add_arguments(self, parser):
+        parser.add_argument('--start')
+        parser.add_argument('--stop')
+        parser.add_argument('--date')
+        parser.add_argument('--display', type=int)
+
     def handle(self, *args, **options):
+        screenshots = Screenshot.objects.order_by('time')
+        if options['display'] is not None:
+            screenshots = screenshots.filter(display=display)
+        if options['date'] is not None:
+            date = options['date']
+            assert options['start'] is None and options['stop'] is None
+            options['start'] = f'{date}T00:00:00'
+            options['stop'] = f'{date}T23:59:59'
         pacific = pytz.timezone('US/Pacific')
-        now_utc = dt.datetime.utcnow().replace(tzinfo=pytz.utc)
-        now = now_utc.astimezone(pacific)
-        yesterday = now - dt.timedelta(days=1)
-        yester_start = yesterday.replace(hour=0, minute=0, second=0, microsecond=0)
-        yester_end = yester_start + dt.timedelta(days=1) - dt.timedelta(microseconds=1)
-        screenshots = list(
-            Screenshot.objects.all()
-            .filter(time__gte=yester_start)
-            .filter(time__lte=yester_end)
-        )
+        if options['start'] is not None:
+            start = dt.datetime.strptime(options['start'], '%Y-%m-%dT%H:%M:%S')
+            start = pacific.localize(start)
+            screenshots = screenshots.filter(time__gte=start)
+        if options['stop'] is not None:
+            stop = dt.datetime.strptime(options['stop'], '%Y-%m-%dT%H:%M:%S')
+            stop = pacific.localize(stop)
+            screenshots = screenshots.filter(time__lte=stop)
+        screenshots = list(screenshots.only('id'))
         iterator = tqdm(screenshots, desc='Deleting Screenshots')
         for screenshot in iterator:
+            screenshot.image.delete()
             screenshot.delete()
         contents_iterator = settings.MEDIA_ROOT.glob('contents/**/*.png')
         iterator = tqdm(contents_iterator, desc='Crawling Contents')
@@ -40,9 +55,18 @@ class Command(BaseCommand):
         iterator = tqdm(screenshots_paths, desc='Resolving Symlinks')
         for screenshot_path in iterator:
             target_path = screenshot_path.resolve()
-            if target_path in references:
-                references[target_path] += 1
-        for contents_path, count in references.items():
+            references[target_path] += 1
+        iterator = tqdm(references.items(), desc='Removing Contents')
+        for contents_path, count in iterator:
             if count > 0:
                 continue
-            # TODO
+            contents_path.unlink()
+        dir_iterator = settings.MEDIA_ROOT.glob('**/')
+        iterator = tqdm(dir_iterator, desc='Crawling Directories')
+        directories = list(iterator)
+        directories.reverse()
+        directories.pop()
+        iterator = tqdm(directories, desc='Removing Empty Directories')
+        for directory in iterator:
+            with suppress(OSError):
+                directory.rmdir()
