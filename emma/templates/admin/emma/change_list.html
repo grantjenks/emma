@@ -22,8 +22,9 @@
   </script>
   <div id="content-main-wrapper"
        hx-get=""
-       hx-trigger="every 1s [!hasInteraction()]"
        hx-select="#content-main-wrapper"
+       hx-swap="outerHTML"
+       hx-trigger="every 1s [!hasInteraction()]"
   >
     {{ block.super }}
     <script type="text/hyperscript">
