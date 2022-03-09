@@ -29,13 +29,11 @@ class Command(BaseCommand):
         parser.add_argument('--stop')
         parser.add_argument('--date')
         parser.add_argument('--display', type=int)
-        parser.add_argument('output', type=pathlib.Path)
+        parser.add_argument('--output', type=pathlib.Path)
 
     def handle(self, *args, **options):
         display = options['display'] or 0
         output = options['output']
-        if output.exists():
-            output.unlink()
         screenshots = Screenshot.objects.order_by('time')
         screenshots = screenshots.filter(display=display)
         pacific = pytz.timezone('US/Pacific')
@@ -52,6 +50,10 @@ class Command(BaseCommand):
             stop = dt.datetime.strptime(options['stop'], '%Y-%m-%dT%H:%M:%S')
             stop = pacific.localize(stop)
             screenshots = screenshots.filter(time__lte=stop)
+        if output is None and options['date'] is not None:
+            output = pathlib.Path(options['date'] + '.mp4')
+        if output.exists():
+            output.unlink()
         screenshots = list(screenshots)
         args = [
             'ffmpeg',
