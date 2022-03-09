@@ -53,9 +53,21 @@ class Command(BaseCommand):
         iterator = tqdm(screenshots_iterator, desc='Crawling Symlinks')
         screenshots_paths = list(iterator)
         iterator = tqdm(screenshots_paths, desc='Resolving Symlinks')
+        missing_target_paths = []
         for screenshot_path in iterator:
             target_path = screenshot_path.resolve()
-            references[target_path] += 1
+            try:
+                references[target_path] += 1
+            except KeyError:
+                pair = screenshot_path, target_path
+                missing_target_paths.append(pair)
+        iterator = tqdm(missing_target_paths, desc='Missing Target Paths')
+        media_root_length = len(str(settings.MEDIA_ROOT))
+        for screenshot_path, target_path in iterator:
+            image_path = str(screenshot_path)[media_root_length + 1:]
+            screenshot = Screenshot.objects.get(image=image_path)
+            screenshot.delete()
+            screenshot_path.unlink()
         iterator = tqdm(references.items(), desc='Removing Contents')
         for contents_path, count in iterator:
             if count > 0:
