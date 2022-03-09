@@ -27,10 +27,11 @@ class Command(BaseCommand):
         if options['display'] is not None:
             screenshots = screenshots.filter(display=display)
         if options['date'] is not None:
-            date = options['date']
             assert options['start'] is None and options['stop'] is None
+            date = dt.date.fromisoformat(options['date'])
+            tomorrow = date + dt.timedelta(days=1)
             options['start'] = f'{date}T00:00:00'
-            options['stop'] = f'{date}T23:59:59'
+            options['stop'] = f'{tomorrow}T00:00:00'
         pacific = pytz.timezone('US/Pacific')
         if options['start'] is not None:
             start = dt.datetime.strptime(options['start'], '%Y-%m-%dT%H:%M:%S')
