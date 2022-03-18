@@ -9,8 +9,6 @@ from django.utils import timezone
 
 from ...models import Screenshot
 
-RUNNING = True
-
 
 class Command(BaseCommand):
     help = 'Record screenshots'
