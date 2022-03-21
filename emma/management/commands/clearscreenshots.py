@@ -66,8 +66,9 @@ class Command(BaseCommand):
         media_root_length = len(str(settings.MEDIA_ROOT))
         for screenshot_path, target_path in iterator:
             image_path = str(screenshot_path)[media_root_length + 1:]
-            screenshot = Screenshot.objects.get(image=image_path)
-            screenshot.delete()
+            with suppress(Screenshot.DoesNotExist):
+                screenshot = Screenshot.objects.get(image=image_path)
+                screenshot.delete()
             screenshot_path.unlink()
         iterator = tqdm(references.items(), desc='Removing Contents')
         for contents_path, count in iterator:
