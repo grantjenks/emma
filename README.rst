@@ -11,13 +11,22 @@ Setup
 =====
 
 1. $ git clone git@github.com:grantjenks/emma.git
+
 2. $ cd emma
+
 3. $ python3 -m venv --copies env
+
 4. $ source env/bin/activate
+
 5. $ pip install -e .
+
 6. System Preferences > Security & Privacy > Screen Recording
    Allow "python" in the virtual env.
-7. $ emma load
+
+7. System Preferences > Security & Privacy > Full Disk Access
+   Allow "python" in the virtual env.
+
+8. $ emma load
 
 
 Ideas

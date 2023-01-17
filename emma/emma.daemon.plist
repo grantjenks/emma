@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"> 
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <!--
       Service for Emma
@@ -8,7 +8,7 @@
       $ launchctl load $HOME/Library/LaunchAgents/emma.daemon.plist
       $ launchctl unload $HOME/Library/LaunchAgents/emma.daemon.plist
   -->
-  <dict> 
+  <dict>
     <key>Label</key>
     <string>emma.daemon</string>
     <key>ProgramArguments</key>
@@ -23,5 +23,9 @@
     <string>Emma</string>
     <key>UserName</key>
     <string>{user}</string>
+    <key>StandardOutPath</key>
+    <string>/tmp/emma.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/emma.err</string>
   </dict>
 </plist>

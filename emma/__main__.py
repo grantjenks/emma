@@ -28,11 +28,12 @@ class App(rumps.App):
 
 
 def run():
-    record_proc = mp.Process(target=call_command, args=['record'])
+    from .utils import call
+    record_proc = mp.Process(target=call, args=(['record'],))
     record_proc.start()
     PROCESS_IDS.append(record_proc.pid)
     runserver_args = ['runserver', '--noreload', '15050']
-    runserver_proc = mp.Process(target=call_command, args=runserver_args)
+    runserver_proc = mp.Process(target=call, args=(runserver_args,))
     runserver_proc.start()
     PROCESS_IDS.append(runserver_proc.pid)
     app = App('E', quit_button=None)

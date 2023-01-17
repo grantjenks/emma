@@ -34,7 +34,7 @@ setuptools.setup(
     entry_points = {
         'console_scripts': ['emma=emma.__main__:main'],
     },
-    classifiers=(
+    classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: Apache Software License',
@@ -46,5 +46,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: Implementation :: CPython',
-    ),
+    ],
 )
